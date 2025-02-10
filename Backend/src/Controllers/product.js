@@ -1,41 +1,64 @@
 const {Router} = require('express');
-const { productUpload } = require('../../multer');
+const { default: productModel } = require('../Model/productModel');
 const productRouter = Router();
 
-
-productRouter.get('/', (req, res) => {
-    res.send('Product Route');
-})
-
-productRouter.post('/',productUpload.array('files'),async (req, res) => {
-    const{name, description, category, tags, stock, email, price} = req.body;
-    const images = req.files.map(file => file.path);
+productRouter.get("/get-product",async(req,res)=>{
     try{
-        const seller = await productModel.findOne({email: email});
-        if(!seller){
-            return res.status(400).json({message: 'Seller not found'});
-        }
-
-        if(images.length < 1){
-            return res.status(400).json({message: 'Please upload at least one image'});
-        }
-
-        const newProduct = await productModel.create({
-            name:name,
-            description:description,
-            category:category,
-            tags:tags,
-            stocks:stock,
-            email:email,
-            price:price,
-            images:images
+        const productFind = await productModel.find();
+        const products =productFind.map((product)=>{
+            return{
+                name:product.name,
+                description:product.description,
+                category:product.category,
+                tags:product.tags,
+                price:product.price,
+                stock:product.stock,
+                email:product.email,
+                images:product.images,
+            };
         });
-        res.status(201).json({message: 'Product created successfully', product: newProduct
+        res.status(200).json({products:products});
     }
     catch(error){
-        console.error(error);
+        console.log(err);
     }
-    })
+});
 
 
-module.exports = productRouter;
+productRouter.get('/',(req,res)=>{
+    res.send('Product Route');
+})
+ productRouter.post('/',productUpload.array('files'),async(req,res)=>{
+    try{
+        const {name,description,price,stock,email,img,category,tag}=req.body;
+        const images = req.files.map(file => file.path) ;
+        try {
+            const seller = await productModel.findOne({email:email})
+           if(!seller){
+            return res.status(400).json({message:"Please upload atleast one image"})
+           }
+           if(images.length===0) {
+            return res.status(400).json({message:"Please upload atleast one image"})
+
+           }
+           const newproduct = await productModel.create({
+            name:name,
+            description:description,
+            category :category,
+            tags: tags,
+            price:price,
+            stock:stock,
+            email:email,
+            images:images,
+
+           })
+        }
+        
+ }
+ catch(error){
+    console.log("error");
+ }
+});
+
+
+ module.exports = productRouter;
