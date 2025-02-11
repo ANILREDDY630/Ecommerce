@@ -1,6 +1,21 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 export const Productcard = ({ name, image, price, description }) => {
+  const [, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval= setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % image.length);
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+  }, [image, setCurrentIndex];
+
+  }, [image]);
+
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row gap-6 transition-all hover:shadow-2xl">
       {/* Left Side - Image & Info */}
@@ -23,4 +38,11 @@ export const Productcard = ({ name, image, price, description }) => {
       </div>
     </div>
   );
-};
+}
+
+Productcard.propTypes = {
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+}
