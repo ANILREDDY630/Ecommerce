@@ -26,7 +26,7 @@ export const Home = () => {
 
   const {products, setProducts} = useState([]);
   const {Error, setError} = useState(null);
-  const {Loading, setLoading} = useState(true);
+  const { setLoading } = useState(true);
   useEffect(() => {
     fetch("http://localhost:3000/product/get-products")
       .then((res) => {
@@ -38,12 +38,13 @@ export const Home = () => {
       .then((data) => {
         setProducts(data.products);
         setLoading(false);
+      })
       .catch((err) => {
         console.error("❌ Error fetching products:", err);
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [Error, setError, setLoading, setProducts]);
 
 
   return (

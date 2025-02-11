@@ -1,18 +1,19 @@
-import React from 'react';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 export const Productcard = ({ name, image, price, description }) => {
-  const {currentindex,setCurrentindex} = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval= setInterval(() => {
-      setCurrentindex((prev)=>(prev+1)%image.length);
+      setCurrentIndex((prev) => (prev + 1) % image.length);
     }, 2000);
 
     return () => {
       clearInterval(interval);
-    }
-  },[image])
+  }, [image, setCurrentIndex];
+
+  }, [image]);
 
 
   return (
@@ -37,4 +38,11 @@ export const Productcard = ({ name, image, price, description }) => {
       </div>
     </div>
   );
-};
+}
+
+Productcard.propTypes = {
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+}

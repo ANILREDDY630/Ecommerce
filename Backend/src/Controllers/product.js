@@ -52,6 +52,8 @@ productRouter.get('/',(req,res)=>{
             images:images,
 
            })
+        } catch (error) {
+            console.log(error);
         }
         
  }
