@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types';
 
 
 
 export const Productcard = ({image,name,price,description}) => {
 
-  const {currentindex, setcurrentindex} =useState(0);
+  const [currentindex, setcurrentindex] = useState(0);
 
   useEffect(() => {
     const interval= setInterval(()=>{
@@ -32,5 +33,14 @@ export const Productcard = ({image,name,price,description}) => {
     <button className='w-full text-white px-4 py-2 rounded-md bg-neutral-900'>Buy Now</button>
     </div>
     </div>
-  )
+  );
 }
+
+Productcard.propTypes = {
+  image: PropTypes.array.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  description: PropTypes.string.isRequired,
+};
+
+export default Productcard;

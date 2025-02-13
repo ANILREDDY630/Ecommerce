@@ -1,18 +1,22 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types';
 
 
 
 export const Productcardseller = ({image,name,price,description}) => {
 
   const {currentindex, setcurrentindex} =useState(0);
-  const navigate=useNavigate()
 
-  const handleEdit=(id)=>{
-       navigate(`/productform/${id}`)
+  const handleEdit=()=>{
   }
-
+  
+  Productcardseller.propTypes = {
+    image: PropTypes.array.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+  };
   const handleDelete=async(id)=>{
     try {
         const response = await axios.delete(
@@ -39,7 +43,7 @@ export const Productcardseller = ({image,name,price,description}) => {
     } 
    
 
-  },[image])
+  },[image, setcurrentindex])
 
   const currentimage = image[currentindex];
 
