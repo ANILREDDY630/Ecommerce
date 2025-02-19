@@ -1,29 +1,54 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <nav className="bg-black p-4">
       <div className="container mx-auto flex justify-between items-center">
         <div>
-          <Link to="/profile" className="text-white hover:text-gray-300">
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
+            }
+          >
             Profile
-          </Link>
+          </NavLink>
         </div>
 
         <div className="flex space-x-6">
-          <Link to="/about" className="text-white hover:text-gray-300">
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
+            }
+          >
             About Us
-          </Link>
-          <Link to="/products" className="text-white hover:text-gray-300">
+          </NavLink>
+          <NavLink
+            to="/products"
+            className={({ isActive }) =>
+              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
+            }
+          >
             Product Page
-          </Link>
-          <Link to="/contact" className="text-white hover:text-gray-300">
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
+            }
+          >
             Contact Us
-          </Link>
-          <Link to="/login" className="text-white hover:text-gray-300">
+          </NavLink>
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
+            }
+          >
             Login/SignUp
-          </Link>
+          </NavLink>
         </div>
       </div>
     </nav>
@@ -31,3 +56,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
