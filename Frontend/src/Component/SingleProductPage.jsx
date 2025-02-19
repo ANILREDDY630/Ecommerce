@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa6";
 import { useParams } from 'react-router-dom';
@@ -7,8 +7,8 @@ import { useParams } from 'react-router-dom';
 const Singleproductpage = () => {
 
     const {product,setproduct}=useState({})
-    const {loading,setLoading}=useState(true)
-    const {error,setError}=useState(false)
+    const {setLoading}=useState(true)
+    const {setError}=useState(false)
     const {quantity,setquantity}=useState(0)
     const {id}=useParams()
 
@@ -47,7 +47,7 @@ const Singleproductpage = () => {
         };
 
         fetchProduct();
-    },[id]);
+    }, [id, setError, setLoading, setproduct]);
     const handleIncrement=()=>{
         setquantity(prev=>prev+1)
     }
