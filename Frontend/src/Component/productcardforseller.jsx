@@ -42,7 +42,9 @@ export const ProductCardSeller = ({ image, name, price, description, id }) => { 
         <button className='w-full text-white px-4 py-2 rounded-md bg-neutral-900' onClick={() => handleEdit(id)}>Edit</button>
       </div>
     </div>
+  );
 };
+
 
 ProductCardSeller.propTypes = {
   image: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -51,5 +53,6 @@ ProductCardSeller.propTypes = {
   description: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
 };
+
 
 export default ProductCardSeller;
