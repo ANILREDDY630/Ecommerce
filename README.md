@@ -80,6 +80,7 @@ Compare it with the stored hashed password for authentication.
 ## Milestone 8
 In this milestone we created two components called Home.jsx and productcard.jsx. product card.jsx is the template used in home.jsx to map out all the products and display them. We also added routes to the home.jsx to display it when the page loads. Based on the number of products the products are mapped and displayed.
 
+
 ## Milestone 9 - Product Form Creation
 
 **Overview**
@@ -114,3 +115,5 @@ Created singleproduct.jsx. The pages is made to show details about the product. 
 
 ## Milestone 17 & 18
 In these two Milestones we first added the cart details to the schema. Then we also created a post request for sending the details and storing them on the database. We also created an endpoint to receive request from cart page.
+
+
