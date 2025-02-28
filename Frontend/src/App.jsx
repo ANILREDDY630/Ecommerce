@@ -1,11 +1,14 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import { Login } from './Components/Login';
-import { Signup } from './Components/Signup';
+
+import { Signup } from './Component/Signup';
 import { Home } from './page/home';
-import { ProductForm } from './Components/ProductForm';
-import Navbar from '../src/Components/Navabar';
-import { Productcard } from './Components/Productcard';
+import { ProductForm } from './Component/ProductForm';
+
+import { Productcard } from './Component/Productcard';
+import { Login } from './Component/Login';
+import Navbar from './Component/Navbar';
+import Cart from './page/Cart';
 
 function App() {
   return (
@@ -14,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/Login" element={<Login />} ></Route>
         <Route path="/Signup" element={<Signup />} ></Route>
+        <Route path="/Cart" element={<Cart />} ></Route>
         <Route path="/home" element={<Home />} ></Route>
         <Route path='/productform' element={<ProductForm/>}/>
         <Route path ='/productCard' element={<Productcard/>}/>

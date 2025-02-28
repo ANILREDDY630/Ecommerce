@@ -114,3 +114,8 @@ Created singleproduct.jsx. The pages is made to show details about the product. 
 
 ## Milestone 17 & 18
 In these two Milestones we first added the cart details to the schema. Then we also created a post request for sending the details and storing them on the database. We also created an endpoint to receive request from cart page.
+
+## Milestone 19
+create cart frontend page and display the products
+For each product add an option to increase and decrease quantity using + and - buttons.
+Create an Backend endpoint for increase and decrease quantity
