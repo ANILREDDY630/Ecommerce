@@ -119,3 +119,8 @@ In these two Milestones we first added the cart details to the schema. Then we a
 create cart frontend page and display the products
 For each product add an option to increase and decrease quantity using + and - buttons.
 Create an Backend endpoint for increase and decrease quantity
+
+## Milestone 21
+create address form frontend page
+Create an state that will store input address
+when we click on add address in profile it should navigate to this form page.
