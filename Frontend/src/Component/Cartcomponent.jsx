@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import { IoIosAddCircleOutline  } from "react-icons/io";
-import {  MdOutlineRemoveCircleOutline } from "react-icons/io";
+// import {  MdOutlineRemoveCircleOutline } from "react-icons/io";
 export default function CartProduct({ _id, email, images, quantity, price }) {
 
 
@@ -41,67 +42,69 @@ export default function CartProduct({ _id, email, images, quantity, price }) {
         })
             .then((res) => {
                 if (!res.ok) {
-                    console.log('error in put req')
+                    throw new Error('Failed to update quantity');
                 }
                 return res.json();
             })
-            .then((data) => {
-                console.log('quantityVal updated:', data);
-            })
-            .catch((err) => {
-                console.error('Error updating quantityVal:', err);
-            });
     };
+    
+    CartProduct.propTypes = {
+        _id: PropTypes.string.isRequired,
+        email: PropTypes.string.isRequired,
+        images: PropTypes.array.isRequired,
+        quantity: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired,
+    };
+
     const currentImage = images && images.length > 0 ? images[currentIndex] : null;
 
     return (
-        <div className="h-max w-full p-4 flex justify-between border-b border-neutral-300 bg-neutral-100 rounded-lg">
-            <div className="flex flex-col gap-y-2">
-                <img
-                    src={currentImage} // Ensure the URL is correct\
-                    alt={name}
-                    className="w-32 h-32 object-cover rounded-lg border border-neutral-300"
-                />
-                <div className="flex flex-row items-center gap-x-2 md:hidden">
-                    <div
-                        onClick={handleIncrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        <IoIosAddCircleOutline />
+            <div>
+                <div className="flex flex-col gap-y-2">
+                    <img
+                        src={currentImage} // Ensure the URL is correct\
+                        alt={name}
+                        className="w-32 h-32 object-cover rounded-lg border border-neutral-300"
+                    />
+                    <div className="flex flex-row items-center gap-x-2 md:hidden">
+                        <div
+                            onClick={handleIncrement}
+                            className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
+                        >
+                            <IoIosAddCircleOutline />
+                        </div>
+                        <div className="px-5 py-1 text-center bg-gray-100 rounded-xl pointer-events-none">
+                            {quantityVal}
+                        </div>
+                        <div
+                            onClick={handleDecrement}
+                            className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
+                        >
+                            {/* <MdOutlineRemoveCircleOutline/> */}
+                        </div>
                     </div>
-                    <div className="px-5 py-1 text-center bg-gray-100 rounded-xl pointer-events-none">
-                        {quantityVal}
-                    </div>
-                    <div
-                        onClick={handleDecrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        <MdOutlineRemoveCircleOutline/>
+                </div>
+                <div className="w-full flex flex-col justify-start items-start md:flex-row md:justify-between md:items-center px-4">
+                    <p className="text-lg font-semibold">{name}</p>
+                    <p className="text-lg font-semibold">${price*quantityVal}</p>
+                    <div className="hidden md:flex flex-row items-center gap-x-2 ">
+                        <div
+                            onClick={handleIncrement}
+                            className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
+                        >
+                            <IoIosAddCircleOutline  />
+                        </div>
+                        <div className="px-5 py-1 text-center bg-gray-100 rounded-xl pointer-events-none">
+                            {quantityVal}
+                        </div>
+                        <div
+                            onClick={handleDecrement}
+                            className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
+                        >
+                            {/* < MdOutlineRemoveCircleOutline/> */}
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className="w-full flex flex-col justify-start items-start md:flex-row md:justify-between md:items-center px-4">
-                <p className="text-lg font-semibold">{name}</p>
-                <p className="text-lg font-semibold">${price*quantityVal}</p>
-                <div className="hidden md:flex flex-row items-center gap-x-2 ">
-                    <div
-                        onClick={handleIncrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        <IoIosAddCircleOutline  />
-                    </div>
-                    <div className="px-5 py-1 text-center bg-gray-100 rounded-xl pointer-events-none">
-                        {quantityVal}
-                    </div>
-                    <div
-                        onClick={handleDecrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        < MdOutlineRemoveCircleOutline/>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
     );
 }
