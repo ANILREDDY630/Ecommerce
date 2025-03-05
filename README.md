@@ -119,3 +119,7 @@ In these two Milestones we first added the cart details to the schema. Then we a
 create cart frontend page and display the products
 For each product add an option to increase and decrease quantity using + and - buttons.
 Create an Backend endpoint for increase and decrease quantity
+
+## Milestone 22
+You need to create an endpoint that will receive the address from address form in frontend
+Add the address to the address array inside user collection.
