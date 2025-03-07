@@ -128,7 +128,22 @@ userrouter.post('/add-address',auth, async(req,res)=>{
 }
 catch(err){
     console.log("error in address",err)
+    res.status(500).json({message: "Error in adding address", error: err});
 }
-})
+});
+
+userrouter.get('/get-address',auth,async(req,res)=>{
+    const {email}=req.query;
+    try{
+        const user=await userModel.findOne({email:email})
+        if(!user){
+            return res.status(400).json({message:"user does not exist"})
+        }
+        return res.status(200).json({message:"addresses are shown successfully",addresses:user.addresses})
+    }
+    catch(err){
+        console.log("error in get address",err)
+    }
+});
 
 module.exports = userrouter;

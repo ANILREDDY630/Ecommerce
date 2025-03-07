@@ -1,69 +1,57 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddressPage = () => {
   const [addresses, setAddresses] = useState([]);
-  const [newAddress, setNewAddress] = useState("");
-  const [showForm, setShowForm] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/api/addresses") // Replace with actual API endpoint
+    fetch("http://localhost:5000/api/addresses")
       .then((res) => res.json())
       .then((data) => setAddresses(data))
-      .catch((err) => console.error("Error fetching addresses:", err));
+      .catch((error) => console.error("Error fetching addresses:", error));
   }, []);
 
-  const handleAddAddress = async () => {
-    if (!newAddress.trim()) return;
-    
-    const response = await fetch("/api/addresses", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ address: newAddress }),
-    });
+  const handleSelectAddress = (address) => {
+    setSelectedAddress(address);
+  };
 
-    if (response.ok) {
-      const addedAddress = await response.json();
-      setAddresses([...addresses, addedAddress]);
-      setNewAddress("");
-      setShowForm(false);
+  const handleConfirmAddress = () => {
+    if (!selectedAddress) {
+      alert("Please select an address!");
+      return;
     }
+    alert(`Order placed with address: ${selectedAddress}`);
+    navigate("/order-summary");
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-xl">
-      <h2 className="text-xl font-bold mb-4">My Addresses</h2>
-      {addresses.length > 0 ? (
-        <ul>
-          {addresses.map((addr, index) => (
-            <li key={index} className="border-b py-2">{addr}</li>
-          ))}
-        </ul>
+    <div className="p-4">
+      <h2 className="text-xl font-bold">Select Address</h2>
+
+      {addresses.length === 0 ? (
+        <p>Loading addresses...</p>
       ) : (
-        <p>No address found.</p>
-      )}
-      <button 
-        onClick={() => setShowForm(true)} 
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Add Address
-      </button>
-      {showForm && (
-        <div className="mt-4">
-          <input
-            type="text"
-            value={newAddress}
-            onChange={(e) => setNewAddress(e.target.value)}
-            className="w-full p-2 border rounded mb-2"
-            placeholder="Enter new address"
-          />
-          <button 
-            onClick={handleAddAddress} 
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        addresses.map((address) => (
+          <div 
+            key={address.id} 
+            className={`p-2 border rounded mb-2 cursor-pointer ${
+              selectedAddress === address.id ? "bg-blue-300" : "bg-gray-100"
+            }`}
+            onClick={() => handleSelectAddress(address.id)}
           >
-            Save Address
-          </button>
-        </div>
+            <p>{address.street}, {address.city}, {address.state}, {address.zip}</p>
+          </div>
+        ))
       )}
+
+      <button 
+        onClick={handleConfirmAddress} 
+        className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
+      >
+        Confirm Address
+      </button>
     </div>
   );
 };

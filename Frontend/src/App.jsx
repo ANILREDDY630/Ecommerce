@@ -9,6 +9,7 @@ import { Productcard } from './Component/Productcard';
 import { Login } from './Component/Login';
 import Navbar from './Component/Navbar';
 import Cart from './page/Cart';
+import AddressPage from './Component/AddressPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/home" element={<Home />} ></Route>
         <Route path='/productform' element={<ProductForm/>}/>
         <Route path ='/productCard' element={<Productcard/>}/>
+        <Route path ='/Addresspage' element={<AddressPage/>}/>
       </Routes>
     </>
   );
