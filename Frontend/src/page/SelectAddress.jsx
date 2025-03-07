@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -6,7 +7,7 @@ const SelectAddress = () => {
     const [addresses, setAddresses] = useState([]);
     const [error, setError] = useState(null); 
     const navigate = useNavigate();
-
+    const email="a@gmail.com"
     useEffect(() => {
         const fetchAddresses = async () => {
             try {
@@ -28,7 +29,7 @@ const SelectAddress = () => {
     }, []);
 
     const handleSelectAddress = (addressId) => {
-        navigate(`/order-confirmation?addressId=${addressId}`);
+        navigate('/order-confirmation',{state:{addressId,email:email}});
     };
 
     return (
