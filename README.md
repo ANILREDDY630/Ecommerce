@@ -119,3 +119,8 @@ In these two Milestones we first added the cart details to the schema. Then we a
 create cart frontend page and display the products
 For each product add an option to increase and decrease quantity using + and - buttons.
 Create an Backend endpoint for increase and decrease quantity
+
+## Milestone 23
+Create an placeorder button inside cart page and navigate to select address page when clicked.
+Create and select address page that will display all the available address and have an option to select one address.
+Write an backend endpoint that will send all the addresses of the user.
