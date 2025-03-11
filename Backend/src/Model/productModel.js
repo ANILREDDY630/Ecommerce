@@ -32,12 +32,12 @@ const productSchema=new Schema({
             match: [/.+@.+\..+/, "Please provide a valid email address"],
         },
         images: {
-            type: [String], // Array of image URLs (base64 or hosted links)
+            type: [String], 
             required: [true, "Please upload product images"],
         },
         createdAt: {
             type: Date,
-            default: Date.now, // Automatically set the creation date
+            default: Date.now, 
         },
     },
     {

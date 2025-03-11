@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 
-export const ProductForm = () => {
+const ProductForm = () => {
    const { id } = useParams();
    const navigate=useNavigate()
     const isEdit = Boolean(id);
@@ -205,3 +205,5 @@ export const ProductForm = () => {
     </div>
   );
 };
+
+export default ProductForm;
