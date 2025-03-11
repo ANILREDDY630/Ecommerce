@@ -124,3 +124,15 @@ Create an Backend endpoint for increase and decrease quantity
 Create an placeorder button inside cart page and navigate to select address page when clicked.
 Create and select address page that will display all the available address and have an option to select one address.
 Write an backend endpoint that will send all the addresses of the user.
+
+## milestone 25
+You need to create an endpoint that will receive the products, user, address details
+You will get the mail of the user using that you need to retrive the _id of the user
+For each product the order will be different with same address
+using order schema you created earlier you will store order details in mongodb order collection
+
+## milestone 26
+You need to create an endpoint that will receive the user mail
+You will get the mail of the user using that you need to retrive the _id of the user
+Using that _id you need to get all the orders of that user
+Send all the users orders in the response.
