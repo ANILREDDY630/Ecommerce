@@ -124,3 +124,10 @@ Create an Backend endpoint for increase and decrease quantity
 Create an placeorder button inside cart page and navigate to select address page when clicked.
 Create and select address page that will display all the available address and have an option to select one address.
 Write an backend endpoint that will send all the addresses of the user.
+
+## Milestone 27
+You need to create an my-orders page
+You will send an get request to my-orders endpoint that we created in previous milestone.
+We will send user mail in to endpoint to get all the user orders
+Display all the user orders
+We will add my-orders page in navbar for better navigation.
