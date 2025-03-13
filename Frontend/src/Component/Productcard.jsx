@@ -1,5 +1,5 @@
-import React from 'react';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 export const Productcard = ({ name, image, price, description }) => {
   const {currentindex,setCurrentindex} = useState(0);
@@ -12,7 +12,7 @@ export const Productcard = ({ name, image, price, description }) => {
     return () => {
       clearInterval(interval);
     }
-  },[image])
+  },[image, setCurrentindex])
 
   const currentimage=image[currentindex];
 
@@ -38,4 +38,11 @@ export const Productcard = ({ name, image, price, description }) => {
       </div>
     </div>
   );
+};
+
+Productcard.propTypes = {
+  name: PropTypes.string.isRequired,
+  image: PropTypes.arrayOf(PropTypes.string).isRequired,
+  price: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 };

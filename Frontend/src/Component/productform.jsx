@@ -22,7 +22,7 @@ const ProductForm = () => {
   useEffect(() => {
     if (isEdit) {
         axios
-            .get(`http://localhost:8000/api/v2/product/product/${id}`)
+            .get(`http://localhost:3000/api/v2/product/product/${id}`)
             .then((response) => {
                 const p = response.data.product;
                 setName(p.name);
@@ -72,7 +72,7 @@ const ProductForm = () => {
 
       if (isEdit) {
         const response = await axios.put(
-            `http://localhost:8000/api/v2/product/update-product/${id}`,
+            `http://localhost:3000/api/v2/product/update-product/${id}`,
             formData,
             {
                 headers: { "Content-Type": "multipart/form-data" },

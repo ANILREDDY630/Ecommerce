@@ -1,6 +1,6 @@
 const {Router}= require('express');
 const { productupload } = require('../../multer');
-const Productmodel = require('../Model/Productmodel');
+const Productmodel = require('../Model/productModel');
 const userModel = require("../Model/userModel");
 const productrouter=Router();
 const path = require('path');
