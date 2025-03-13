@@ -131,3 +131,7 @@ You will send an get request to my-orders endpoint that we created in previous m
 We will send user mail in to endpoint to get all the user orders
 Display all the user orders
 We will add my-orders page in navbar for better navigation.
+
+## Milestone 21
+create address form frontend page Create an state that will store input address when we click on add address in profile it should navigate to this form page.
+
