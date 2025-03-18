@@ -128,3 +128,7 @@ Create and select address page that will display all the available address and h
 Write an backend endpoint that will send all the addresses of the user.
 
 main
+## Milestone 28
+If the order is already canceled this button should not be displayed
+You need to create an endpoint that will receive the order-id
+Get the order using this id and mark the status canceled and save
