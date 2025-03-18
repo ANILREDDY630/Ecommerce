@@ -19,7 +19,7 @@ export const Home = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("❌ Error fetching products:", err);
+        console.error(err);
         setError(err.message);
         setLoading(false);
       });

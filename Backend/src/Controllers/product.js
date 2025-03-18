@@ -1,6 +1,6 @@
 const {Router}= require('express');
 const { productupload } = require('../../multer');
-const Productmodel = require('../Model/Productmodel');
+const Productmodel = require('../Model/productModel');
 const userModel = require("../Model/userModel");
 const productrouter=Router();
 const path = require('path');
@@ -102,6 +102,34 @@ catch(err){
 }
 
 })
+
+productrouter.put('/editcart',async(req,res)=>{
+    try {
+        const { email,productid,quantity}=req.body
+
+        if(!email||!productid||quantity==undefined){
+            return res.status(404).json({message:"put all details"})
+        }
+        const finduse=await userModel.findOne({email:email})
+        if(!finduse){
+            return res.status(404).json({message:"error is not found"})
+        }
+        const findproduct=await ProductModel.findOne({_id:productid})
+        if(!findproduct||findproduct.stock<=0){
+            return res.status(404).json({message:"product not avzailable"})
+        }
+        const findcartproduct=finduser.cart.find(item=>item.productid===productid)
+        if(!findcartproduct){
+            return res.status(404).json({message:"can not find"}) 
+        }
+        findcartproduct.quantity=quantity
+        await finduser.save()
+        return res.status(200).json({message:"edited successfully"})
+    } catch(err){
+        console.log(err)
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
 productrouter.post("/post-product", productupload.array('files'), async (req, res) => {
     const { name, description, category, tags, price, stock, email } = req.body;

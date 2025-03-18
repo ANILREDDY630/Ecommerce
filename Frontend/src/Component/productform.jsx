@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 
-export const ProductForm = () => {
+const ProductForm = () => {
    const { id } = useParams();
    const navigate=useNavigate()
     const isEdit = Boolean(id);
@@ -22,7 +22,7 @@ export const ProductForm = () => {
   useEffect(() => {
     if (isEdit) {
         axios
-            .get(`http://localhost:8000/api/v2/product/product/${id}`)
+            .get(`http://localhost:3000/api/v2/product/product/${id}`)
             .then((response) => {
                 const p = response.data.product;
                 setName(p.name);
@@ -72,7 +72,7 @@ export const ProductForm = () => {
 
       if (isEdit) {
         const response = await axios.put(
-            `http://localhost:8000/api/v2/product/update-product/${id}`,
+            `http://localhost:3000/api/v2/product/update-product/${id}`,
             formData,
             {
                 headers: { "Content-Type": "multipart/form-data" },
@@ -205,3 +205,5 @@ export const ProductForm = () => {
     </div>
   );
 };
+
+export default ProductForm;
