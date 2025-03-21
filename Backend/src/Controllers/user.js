@@ -1,155 +1,224 @@
-const {Router}= require("express");
+const { Router } = require("express");
 const userModel = require("../Model/userModel");
-const { upload } = require("../../multer");
-const jwt = require('jsonwebtoken');
+const productModel = require("../Model/productModel");
+const orderModel = require("../Model/orderModel"); // Fixed case sensitivity
 const bcrypt = require("bcrypt");
+const { upload } = require("../../multer");
+const jwt = require("jsonwebtoken");
+const axios = require("axios"); // For calling PayPal API
+require("dotenv").config({ path: "./src/config/.env" });
+
+const secret = process.env.private_key;
+const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+const PAYPAL_SECRET = process.env.PAYPAL_SECRET;
 const userrouter = Router();
-const AsyncError = require('../Middleware/catchAsyncError');
-const auth = require("../Middleware/auth");
-require('dotenv').config({  path:'./src/config/.env'});
-
-const secret = process.env.secretkey;
-
-userrouter.post("/create-user",upload.single('file'),async(req,res)=>{
-    const {name, email, password} = req.body;
-    const userEmail = await userModel.findOne({email});
-    if (userEmail) {
-        return next(new ErrorHandler("User already exists", 400));
-      }
-
-      const filename = req.file.filename ;
-      const fileUrl = path.join(filename);
-   
-    bcrypt.hash(password, 10,async function(err, hash) {
-
-        await userModel.create({
-            name:name,
-            email:email,
-            password:hash,
-            // avatar:fileUrl
-
-        })
-
-        })
 
 
+userrouter.post("/create-user", upload.single("file"), async (req, res) => {
+  const { name, email, password } = req.body;
+  const userEmail = await userModel.findOne({ email });
+
+  if (userEmail) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+
+  bcrypt.hash(password, 10, async function (err, hash) {
+    await userModel.create({
+      name,
+      email,
+      password: hash,
+    });
+    res.status(201).json({ message: "User created successfully" });
+  });
 });
 
 
-userrouter.post("/login",async(req,res)=>{
-    const {email, password} = req.body;
-    const check= await userModel.findOne({email:email});
-        console.log(check);
-    if(!check){
-        return res.status(400).json({message:"User not found"});
-    }
+userrouter.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const check = await userModel.findOne({ email });
 
-    bcrypt.compare(password,check.password , function(err, result) {
-       
-        if(err){
-            return res.status(400).json({message:"Invalid bcrpyt compare"});
+  if (!check) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  bcrypt.compare(password, check.password, function (err, result) {
+    if (err) {
+      return res.status(400).json({ message: "Invalid bcrypt compare" });
+    }
+    if (result) {
+      jwt.sign({ email }, secret, (err, token) => {
+        if (err) {
+          return res.status(400).json({ message: "Invalid jwt" });
         }
-        if(result){
-            
-            jwt.sign({email:email},secret,(err,token)=>{
-                if(err){
-                    return res.status(400).json({message:"Invalid jwt"});
-                }
-               res.setHeader("Autherization",`Bearer ${token}`)
-                console.log(token);
-                res.status(200).json({token:token});    
-            })
+        res.status(200).json({ token });
+      });
+    } else {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+  });
+});
 
 
-        }   
-        else{
-            return res.status(400).json({message:"Invalid password"});
-        }
-    });
+userrouter.get("/profile", async (req, res) => {
+  const { email } = req.query;
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
-})
+
+userrouter.post("/update-address", async (req, res) => {
+  const { email, address } = req.body;
+  try {
+    const user = await userModel.findOneAndUpdate(
+      { email },
+      { $push: { addresses: address } },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Address updated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating address" });
+  }
+});
 
 
-userrouter.get('/profile',async (req,res) => {
-    const {email} = req.query;
-    if(!email){
-        return res.status(400).json({message:"email cannot be empty!"})
+userrouter.get("/get-addresses", async (req, res) => {
+  const { email } = req.query;
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user || !user.addresses.length) {
+      return res.status(404).json({ message: "No addresses found" });
+    }
+    res.status(200).json({ addresses: user.addresses });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching addresses" });
+  }
+});
+
+
+userrouter.post("/place-order", async (req, res) => {
+  const { email, products, address } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    try{
-    const user = await userModel.findOne({email:email});
+    const orders = [];
+    for (const product of products) {
+      const productDetails = await productModel.findById(product.productId);
+      if (!productDetails) {
+        return res.status(400).json({ message: `Product with ID ${product.productId} not found` });
+      }
 
-    if(!user){
-        return res.status(404).json({message:"The user was not found"});
+      const order = new orderModel({
+        userId: user._id,
+        productId: product.productId,
+        quantity: product.quantity,
+        address: address,
+        status: "Pending",
+        paypalOrderId: "", // Store PayPal order ID later
+        createdAt: new Date(),
+      });
+      
     }
 
-    const Users = {
-        name: user.name,
-        email: user.email,
-        phone: user.phoneNumber,
-        image: user.avatarurl,
-        address: user.address
+    await orderModel.insertMany(orders);
+    res.status(201).json({ message: "Order placed successfully", orders });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error placing order" });
+  }
+});
+
+
+userrouter.post("/verify-paypal-payment", async (req, res) => {
+  const { orderId } = req.body;
+
+  try {
+    const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString("base64");
+    const response = await axios.post(
+      `https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderId}/capture`,
+      {},
+      {
+        headers: {
+          Authorization: `Basic ${auth}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.data.status === "COMPLETED") {
+      const order = await orderModel.findByIdAndUpdate(orderId, { status: "Paid" }, { new: true });
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      return res.status(200).json({ message: "Payment successful", order });
+    } else {
+      return res.status(400).json({ message: "Payment not completed" });
+    }
+  } catch (error) {
+    console.error("PayPal Payment Verification Error:", error);
+    return res.status(500).json({ message: "Error verifying payment" });
+  }
+});
+
+
+userrouter.get("/your-orders", async (req, res) => {
+  const { email } = req.query;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({message:"successfully recieved"});
-}
+    const orders = await orderModel.find({ userId: user._id }).populate("productId");
+    const filteredOrders = orders.filter(order => order.productId !== null);
 
-catch(err){
-    res.status(500).json({error: err});
-}
-})
-
-
-
-
-userrouter.post('/add-address',auth, async(req,res)=>{
-
-    try{
-
-        const email=req.user
-    const {country,
-        city,
-        address1,
-        address2,   
-        zipCode,
-        addressType}=req.body
-
-        const user=await userModel.find({email:email})
-
-      const newaddress={
-        country,
-        city,
-        address1,
-        address2,
-        zipCode,
-        addressType,
+    if (!filteredOrders.length) {
+      return res.status(404).json({ message: "No valid orders found" });
     }
 
-    user.addresses.push(newaddress)
-    await user.save()
-}
-catch(err){
-    console.log("error in address",err)
-}
-})
-
-userrouter.get('/get-address',auth,async(req,res)=>{
-   const email=req.user
-   try{
-    const user=await userModel.findOne({email:email})
-    if(!user){
-        return res.status(400).json({message:"User not found"})
-    }   
-    res.status(200).json({message:"successfully recieved",user:user.addresses
-    })
-   }
-   catch(err){
-         console.log("error in get address",err)    
-   }
+    res.status(200).json({ orders: filteredOrders });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Error fetching orders" });
+  }
+});
 
 
+userrouter.post("/cancel-order", async (req, res) => {
+  const { orderId } = req.body;
 
-})
+  try {
+    const order = await orderModel.findById(orderId);
 
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    
+    if (order.status === "Canceled") {
+      return res.status(400).json({ message: "Order is already canceled" });
+    }
+
+    order.status = "Canceled";
+    await order.save();
+
+    res.status(200).json({ message: "Order canceled successfully", order });
+  } catch (error) {
+    console.error("Error canceling order:", error);
+    res.status(500).json({ message: "Error canceling order" });
+  }
+});
 
 module.exports = userrouter;
