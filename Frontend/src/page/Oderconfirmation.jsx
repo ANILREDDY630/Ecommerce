@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 const OrderConfirmation = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -28,7 +28,7 @@ const OrderConfirmation = () => {
                 const address = addressData.addresses.find(addr => addr._id === addressId);
                 if (!address) {
                     throw new Error('Selected address not found.');
-                }
+                }  
                 setSelectedAddress(address);
                 // Fetch cart products from /cartproducts endpoint
                 const cartResponse = await axios.get('http://localhost:3000//product/getcart', {
@@ -44,7 +44,7 @@ const OrderConfirmation = () => {
                     name: item.productId.name,
                     price: item.productId.price,
                     images: item.productId.images.map(imagePath => `http://localhost:3000${imagePath}`),
-                    quantity: item.quantity,
+                    quantity: item.quantity
                 }));
                 setCartItems(processedCartItems);
                 // Calculate total price
@@ -159,6 +159,17 @@ const OrderConfirmation = () => {
                         <div className='p-4 border rounded-md'>
                             <p>Cash on Delivery</p>
                         </div>
+                        
+                        <PayPalScriptProvider options={{ clientId: "AYGwnwmeBjjWperGy4a-RWi9mKWFg6LOl8JTWq4QYLF_Sz20OA_-IE6mEpye1F0XbyXeJQQcsXmawKHB" }}>
+                             <PayPalButtons style={{ layout: "horizontal" }} 
+                                 createOrder={(data,actions)=>{
+                                    return actions.order.create({purchase_units:[{amaount:{value:totalPrice.toFixed(2)}}]})
+                                 }}
+                                 onApprove={(data,actions)=>{
+                                    return actions.order.capture()
+                                 }}
+                             >Pay with paypal </PayPalButtons>
+                        </PayPalScriptProvider>
                     </div>
                     {/* Place Order Button */}
                     <div className='flex justify-center'>
