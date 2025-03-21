@@ -1,53 +1,25 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  return (
-    <nav className="bg-black p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div>
-          <NavLink
-            to="/profile"
-            className={({ isActive }) =>
-              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
-            }
-          >
-            Profile
-          </NavLink>
-        </div>
+  const userEmail = useSelector((state) => state.user.email); // Get email from Redux
 
-        <div className="flex space-x-6">
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
-            }
-          >
-            About Us
-          </NavLink>
-          <NavLink
-            to="/products"
-            className={({ isActive }) =>
-              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
-            }
-          >
-            Product Page
-          </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
-            }
-          >
-            Contact Us
-          </NavLink>
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `text-white hover:text-gray-300 ${isActive ? "text-gray-400" : ""}`
-            }
-          >
-            Login/SignUp
-          </NavLink>
+  return (
+    <nav className="bg-blue-600 p-4 text-white">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-lg font-bold">
+          MyShop
+        </Link>
+        <div className="space-x-4">
+          <Link to="/products" className="hover:underline">
+            Products
+          </Link>
+          <Link to="/my-orders" className="hover:underline">
+            My Orders
+          </Link>
+          {userEmail && (
+            <span className="text-sm text-gray-200">Welcome, {userEmail}</span>
+          )}
         </div>
       </div>
     </nav>
@@ -55,4 +27,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
