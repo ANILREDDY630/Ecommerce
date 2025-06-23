@@ -1,6 +1,5 @@
-
 import axios from 'axios';
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import { useParams } from 'react-router-dom';
@@ -40,7 +39,7 @@ const handleIncrement=()=>{
         };
   
         fetchProduct();
-    }, [id, setError, setLoading, setproduct]);
+    },[id]);
 
     if(loading){
         return <p>Loading</p>

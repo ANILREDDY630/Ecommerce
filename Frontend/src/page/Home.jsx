@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useEffect } from 'react';
 import { Productcard } from '../Component/Productcard'
 
@@ -19,7 +20,7 @@ export const Home = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error("❌ Error fetching products:", err);
         setError(err.message);
         setLoading(false);
       });

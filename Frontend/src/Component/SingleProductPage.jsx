@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa6";
 import { useParams } from 'react-router-dom';
@@ -7,8 +7,8 @@ import { useParams } from 'react-router-dom';
 const Singleproductpage = () => {
 
     const {product,setproduct}=useState({})
-    const {setLoading}=useState(true)
-    const {setError}=useState(false)
+    const {loading,setLoading}=useState(true)
+    const {error,setError}=useState(false)
     const {quantity,setquantity}=useState(0)
     const {id}=useParams()
 
@@ -47,7 +47,7 @@ const Singleproductpage = () => {
         };
 
         fetchProduct();
-    }, [id, setError, setLoading, setproduct]);
+    },[id]);
     const handleIncrement=()=>{
         setquantity(prev=>prev+1)
     }
@@ -63,7 +63,7 @@ const Singleproductpage = () => {
         <div className="w-full bsm:w-2/3 md:w-1/3 rounded-lg">
     {product.images && product.images.length > 0 ? (
         <img
-            src={`http://localhost:3000${product.images[0]}`}
+            src={`http://localhost:8000${product.images[0]}`}
             alt={product.name}
             className="w-full h-full object-contain bsm:object-cover"
             style={{ maxHeight: "500px" }} // Adjust the max height as needed

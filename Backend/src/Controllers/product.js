@@ -1,14 +1,15 @@
 const {Router}= require('express');
 const { productupload } = require('../../multer');
-const Productmodel = require('../Model/productModel');
+
 const userModel = require("../Model/userModel");
 const productrouter=Router();
 const path = require('path');
 const { userInfo } = require('os');
+const ProductModel = require('../Model/productModel');
 
 productrouter.get("/get-product", async (req, res) => {
     try {
-        const productfind = await Productmodel.find();
+        const productfind = await ProductModel.find();
         console.log(productfind);
         if (!productfind) {
             return res.status(400).json({ message: "No products found" });
