@@ -1,12 +1,14 @@
+  
+ 
 import { useState, useEffect } from 'react';
-import CartProduct from '../Component/Cartcomponent';
+import CartProduct from '../Component/Cartcompo';
 
 const Cart = () => {
 
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch("")
+        fetch("http://localhost:3000/product/getcart")
           .then((res) => {
             if (!res.ok) {
               console.log("error in cart page")

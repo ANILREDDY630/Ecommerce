@@ -46,4 +46,4 @@ const productSchema=new Schema({
 )
 
 const ProductModel = model('Product', productSchema)
- module.export = ProductModel
+ module.exports = ProductModel

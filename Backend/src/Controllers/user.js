@@ -1,11 +1,12 @@
 const { Router } = require("express");
-const userModel = require("../Model/userModel");
+
 const productModel = require("../Model/productModel");
-const orderModel = require("../Model/orderModel"); // Fixed case sensitivity
+; // Fixed case sensitivity
 const bcrypt = require("bcrypt");
 const { upload } = require("../../multer");
 const jwt = require("jsonwebtoken");
 const axios = require("axios"); // For calling PayPal API
+const userModel = require("../Model/Usemodel");
 require("dotenv").config({ path: "./src/config/.env" });
 
 const secret = process.env.private_key;
