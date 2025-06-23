@@ -125,6 +125,13 @@ Create an placeorder button inside cart page and navigate to select address page
 Create and select address page that will display all the available address and have an option to select one address.
 Write an backend endpoint that will send all the addresses of the user.
 
+## milestone 27
+You need to create an my-orders page
+You will send an get request to my-orders endpoint that we created in previous milestone.
+We will send user mail in to endpoint to get all the user orders
+Display all the user orders
+We will add my-orders page in navbar for better navigation.
+
 ## Milestone 29
 In this Milestone we created an account in paypal and got the Client ID. We also looked at NPM documentation for react-paypal-js and used it to make the paypal button and integrate the frontend logic for the payment page. here are the steps I followed: Please create an PayPal account first PayPal developer dashboard Once you login you can see an option for an sandbox accounts. Copy the UserID of that account and save it. In this sandbox accounts you can find your client id copy and save it. In your order conformation page you need two options for payment one is COD and another is online payment. Create radio buttons to select COD or online payment and when we click on online payment PayPal buttons need to be displayed. In next milestone we will write an code to display and use those PayPal online Payments buttons.
 
